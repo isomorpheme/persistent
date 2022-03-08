@@ -157,7 +157,7 @@ rawAcquireSqlConn isolation = do
 -- Upon an exception the transaction is rolled back and the connection
 -- destroyed.
 --
--- This is equivalent to 'runSqlConn but does not incur the 'MonadUnliftIO'
+-- This is equivalent to 'runSqlConn' but does not incur the 'MonadUnliftIO'
 -- constraint, meaning it can be used within, for example, a 'Conduit'
 -- pipeline.
 --
@@ -183,7 +183,7 @@ runSqlConn r conn = with (acquireSqlConn conn) $ runReaderT r
 -- @since 2.9.0
 runSqlConnWithIsolation :: forall backend m a. (MonadUnliftIO m, BackendCompatible SqlBackend backend) => ReaderT backend m a -> backend -> IsolationLevel -> m a
 runSqlConnWithIsolation r conn isolation =
-  with (acquireSqlConnWithIsolation isolation conn) $ runReaderT r
+  with (SqlConnWithIsolation isolation conn) $ runReaderT r
 
 runSqlPersistM
     :: (BackendCompatible SqlBackend backend)
